@@ -1,8 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
+  type Status = "guessing" | "guessed-correctly" | "blank";
   type Square = {
     color: string;
-    status: string;
+    status: Status;
   };
+
+  const wait = (s: number) =>
+    new Promise((resolve) => {
+      return setTimeout(resolve, s * 1000);
+    });
 
   const $board = document.querySelector(".board-game");
 
@@ -21,20 +27,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const buildBlock = ({ color }: Square) => {
     const $block = document.createElement("div");
-    $block.classList.add("block", "show", `bg-${color}`);
-    $block.addEventListener("click", (e) => {
+    $block.classList.add("block", `bg-${color}`);
+    $block.addEventListener("click", function (e) {
       e.stopPropagation();
-      console.log("clicked");
+      this.classList.add("show");
+      makeAllBlocksTransparent();
     });
 
     return $block;
   };
 
-  const populateBoardWithSquares = () =>
+  const populateBoardWithBlocks = () =>
     squares.forEach((square) => {
       const $block = buildBlock(square);
       $board.append($block);
     });
 
-  populateBoardWithSquares();
+  const makeAllBlocksTransparent = () => {
+    wait(3).then(() => {
+      const $blocks = document.querySelectorAll(".block").forEach((block) => {
+        block.classList.remove("show");
+      });
+    });
+  };
+
+  populateBoardWithBlocks();
 });

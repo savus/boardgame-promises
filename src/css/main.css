@@ -19,26 +19,22 @@
   border: 1px solid black;
 }
 
-.bg-green {
+.show.bg-green {
   background-color: green;
 }
 
-.bg-red {
+.show.bg-red {
   background-color: red;
 }
 
-.bg-blue {
+.show.bg-blue {
   background-color: blue;
 }
 
-.bg-purple {
+.show.bg-purple {
   background-color: purple;
 }
 
-.bg-tomato {
+.show.bg-tomato {
   background-color: tomato;
-}
-
-.bg-green {
-  background-color: green;
 }
