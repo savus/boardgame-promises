@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!$gameBoard) throw new Error("could not find board game");
 
   $gameBoard.addEventListener("click", () => {
+    console.log(guesses);
     if (guesses[0] && guesses[1]) {
       guesses = [null, null];
     }
@@ -47,22 +48,34 @@ document.addEventListener("DOMContentLoaded", () => {
     $block.classList.add("block", `bg-${color}`);
     $block.addEventListener("click", function (e) {
       e.stopPropagation();
-      if (!guesses[0]) {
-        guesses = [index, null];
+      if (guesses[0] === null) {
+        guesses[0] = index;
         showBlock(index, true);
         return;
       }
-      if (!guesses[1]) {
+      if (guesses[1] === null) {
         guesses[1] = index;
         showBlock(index, true);
         if (isCorrect()) {
+          wait(0.5)
+            .then(() => {
+              alert("Success!");
+            })
+            .then(() => {
+              showBlock(guesses[0], false);
+              showBlock(guesses[1], false);
+              guesses = [null, null];
+            });
+
           return;
         } else {
-          alert("You fucked up");
+          wait(0.3).then(() => {
+            alert("You fucked up");
+          });
           wait(1).then(() => {
-            guesses = [null, null];
             showBlock(guesses[0], false);
             showBlock(guesses[1], false);
+            guesses = [null, null];
           });
         }
       }
@@ -79,19 +92,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const showBlock = (index: number | null, show: boolean) => {
     const $blocks = [...document.querySelectorAll(".block")];
-    if (show) {
-      $blocks[index].classList.add("show");
-    } else {
-      $blocks[index].classList.remove("show");
+    if (index !== null) {
+      if (show) {
+        $blocks[index].classList.add("show");
+      } else {
+        $blocks[index].classList.remove("show");
+      }
     }
-  };
-
-  const makeAllBlocksTransparent = () => {
-    wait(3).then(() => {
-      const $blocks = document.querySelectorAll(".block").forEach((block) => {
-        block.classList.remove("show");
-      });
-    });
   };
 
   populateBoardWithBlocks();
